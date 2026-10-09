@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block titulo %}Painel - Clínica Vida{% endblock %}
+
+{% block conteudo %}
+    <section class="banner">
+        <div>
+            <h1>Olá, {{ session['usuario_nome'] }}! 👋</h1>
+            <p>Bem-vindo(a) ao painel de controle da Clínica Vida.</p>
+        </div>
+        <div class="banner-emoji">🏥</div>
+    </section>
+
+    <div class="cards">
+        <div class="card">
+            <div class="card-icone azul">👥</div>
+            <div class="card-info">
+                <h3>Usuários</h3>
+                <p class="numero">{{ total_usuarios }}</p>
+            </div>
+            <a href="{{ url_for('usuarios') }}" class="btn btn-pequeno">Gerenciar</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icone verde">🩺</div>
+            <div class="card-info">
+                <h3>Médicos</h3>
+                <p class="numero">{{ total_medicos }}</p>
+            </div>
+            <a href="{{ url_for('medicos') }}" class="btn btn-pequeno">Gerenciar</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icone azul">🧑</div>
+            <div class="card-info">
+                <h3>Pacientes</h3>
+                <p class="numero">{{ total_pacientes }}</p>
+            </div>
+            <a href="{{ url_for('pacientes') }}" class="btn btn-pequeno">Gerenciar</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icone laranja">📅</div>
+            <div class="card-info">
+                <h3>Agendamentos</h3>
+                <p class="numero">—</p>
+            </div>
+            <a href="{{ url_for('agendamentos') }}" class="btn btn-pequeno">Ver</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Clínica Vida{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <a class="logo" href="{{ url_for('painel') }}">
+                <span class="logo-icone">✚</span>
+                <span>Clínica <strong>Vida</strong></span>
+            </a>
+
+            <nav class="menu">
+                <a href="{{ url_for('painel') }}" class="{{ 'ativo' if request.endpoint == 'painel' }}">
+                    <span class="ico">🏠</span> Início
+                </a>
+                <a href="{{ url_for('usuarios') }}" class="{{ 'ativo' if request.endpoint in ['usuarios', 'editar_usuario'] }}">
+                    <span class="ico">👥</span> Usuários
+                </a>
+                <a href="{{ url_for('medicos') }}" class="{{ 'ativo' if request.endpoint in ['medicos', 'editar_medico'] }}">
+                    <span class="ico">🩺</span> Médicos
+                </a>
+                <a href="{{ url_for('pacientes') }}" class="{{ 'ativo' if request.endpoint in ['pacientes', 'editar_paciente'] }}">
+                    <span class="ico">🧑</span> Pacientes
+                </a>
+                <a href="{{ url_for('agendamentos') }}" class="{{ 'ativo' if request.endpoint == 'agendamentos' }}">
+                    <span class="ico">📅</span> Agendamentos
+                </a>
+                <a href="{{ url_for('sair') }}" class="sair">
+                    <span class="ico">🚪</span> Sair
+                </a>
+            </nav>
+
+            <div class="usuario-box">
+                <div class="avatar">{{ session['usuario_nome'][0]|upper }}</div>
+                <div>
+                    <strong>{{ session['usuario_nome'] }}</strong>
+                    <small>Logado</small>
+                </div>
+            </div>
+        </aside>
+
+        <main class="conteudo">
+            {% with mensagens = get_flashed_messages(with_categories=true) %}
+                {% for categoria, mensagem in mensagens %}
+                    <div class="alerta {{ categoria }}">{{ mensagem }}</div>
+                {% endfor %}
+            {% endwith %}
+
+            {% block conteudo %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

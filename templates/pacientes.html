@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block titulo %}Pacientes - Clínica Vida{% endblock %}
+
+{% block conteudo %}
+    <h1>Pacientes</h1>
+
+    <section class="painel-box">
+        <h2>{{ 'Editar paciente' if editando else 'Novo paciente' }}</h2>
+        <form method="POST"
+              action="{{ url_for('editar_paciente', id=editando['id']) if editando else url_for('pacientes') }}">
+            <div class="grade-form">
+                <div>
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" value="{{ editando['nome'] if editando else '' }}" required>
+                </div>
+                <div>
+                    <label for="cpf">CPF</label>
+                    <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" value="{{ editando['cpf'] if editando else '' }}" required>
+                </div>
+                <div>
+                    <label for="data_nascimento">Data de Nascimento</label>
+                    <input type="date" id="data_nascimento" name="data_nascimento" value="{{ editando['data_nascimento'] if editando else '' }}" required>
+                </div>
+                <div>
+                    <label for="telefone">Telefone</label>
+                    <input type="text" id="telefone" name="telefone" placeholder="(11) 99999-9999" value="{{ editando['telefone'] if editando else '' }}" required>
+                </div>
+                <div class="campo-largo">
+                    <label for="endereco">Endereço</label>
+                    <input type="text" id="endereco" name="endereco" value="{{ editando['endereco'] if editando else '' }}" required>
+                </div>
+            </div>
+            <button type="submit" class="btn">{{ 'Salvar alterações' if editando else 'Cadastrar' }}</button>
+            {% if editando %}
+                <a href="{{ url_for('pacientes') }}" class="btn btn-cinza">Cancelar</a>
+            {% endif %}
+        </form>
+    </section>
+
+    <section class="painel-box">
+        <h2>Lista de pacientes</h2>
+        <div class="tabela-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th><th>Nome</th><th>CPF</th><th>Nascimento</th>
+                        <th>Telefone</th><th>Endereço</th><th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in pacientes %}
+                    <tr>
+                        <td>{{ p['id'] }}</td>
+                        <td>{{ p['nome'] }}</td>
+                        <td>{{ p['cpf'] }}</td>
+                        <td>{{ p['data_nascimento'][8:10] }}/{{ p['data_nascimento'][5:7] }}/{{ p['data_nascimento'][0:4] }}</td>
+                        <td>{{ p['telefone'] }}</td>
+                        <td>{{ p['endereco'] }}</td>
+                        <td class="acoes">
+                            <a href="{{ url_for('editar_paciente', id=p['id']) }}" class="btn btn-pequeno">Editar</a>
+                            <form method="POST" action="{{ url_for('excluir_paciente', id=p['id']) }}"
+                                  onsubmit="return confirm('Deseja realmente excluir este paciente?');">
+                                <button type="submit" class="btn btn-pequeno btn-perigo">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="7" class="vazio">Nenhum paciente cadastrado.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}

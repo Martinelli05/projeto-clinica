@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block titulo %}Médicos - Clínica Vida{% endblock %}
+
+{% block conteudo %}
+    <h1>Médicos</h1>
+
+    <section class="painel-box">
+        <h2>{{ 'Editar médico' if editando else 'Novo médico' }}</h2>
+        <form method="POST"
+              action="{{ url_for('editar_medico', id=editando['id']) if editando else url_for('medicos') }}">
+            <div class="grade-form">
+                <div>
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" value="{{ editando['nome'] if editando else '' }}" required>
+                </div>
+                <div>
+                    <label for="crm">CRM</label>
+                    <input type="text" id="crm" name="crm" value="{{ editando['crm'] if editando else '' }}" required>
+                </div>
+                <div>
+                    <label for="especialidade">Especialidade</label>
+                    <input type="text" id="especialidade" name="especialidade" value="{{ editando['especialidade'] if editando else '' }}" required>
+                </div>
+                <div>
+                    <label for="telefone">Telefone</label>
+                    <input type="text" id="telefone" name="telefone" value="{{ editando['telefone'] if editando else '' }}" required>
+                </div>
+            </div>
+            <button type="submit" class="btn">{{ 'Salvar alterações' if editando else 'Cadastrar' }}</button>
+            {% if editando %}
+                <a href="{{ url_for('medicos') }}" class="btn btn-cinza">Cancelar</a>
+            {% endif %}
+        </form>
+    </section>
+
+    <section class="painel-box">
+        <h2>Lista de médicos</h2>
+        <div class="tabela-wrap">
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Nome</th><th>CRM</th><th>Especialidade</th><th>Telefone</th><th>Ações</th></tr>
+                </thead>
+                <tbody>
+                    {% for m in medicos %}
+                    <tr>
+                        <td>{{ m['id'] }}</td>
+                        <td>{{ m['nome'] }}</td>
+                        <td>{{ m['crm'] }}</td>
+                        <td>{{ m['especialidade'] }}</td>
+                        <td>{{ m['telefone'] }}</td>
+                        <td class="acoes">
+                            <a href="{{ url_for('editar_medico', id=m['id']) }}" class="btn btn-pequeno">Editar</a>
+                            <form method="POST" action="{{ url_for('excluir_medico', id=m['id']) }}"
+                                  onsubmit="return confirm('Deseja realmente excluir este médico?');">
+                                <button type="submit" class="btn btn-pequeno btn-perigo">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="6" class="vazio">Nenhum médico cadastrado.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}
